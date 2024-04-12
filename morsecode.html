@@ -1,0 +1,169 @@
+<html>
+<head>
+<title>Morse Code</title>
+<script>
+
+function encdec(){
+    // Set a string called str_input to the value inputted by the user
+	let str_input = document.getElementById("input").value;
+    // Set a string called operation to the operation that will be carried forward by the code
+	let operation = document.getElementById("operation").value;
+
+    // Set a constant dictionary which represents the translation between morse code and letters 
+	const mcode = {
+      'A': '.-', 'B': '-...', 'C': '-.-.', 'D': '-..', 'E': '.', 'F': '..-.',
+      'G': '--.', 'H': '....', 'I': '..', 'J': '.---', 'K': '-.-', 'L': '.-..',
+      'M': '--', 'N': '-.', 'O': '---', 'P': '.--.', 'Q': '--.-', 'R': '.-.',
+      'S': '...', 'T': '-', 'U': '..-', 'V': '...-', 'W': '.--', 'X': '-..-',
+      'Y': '-.--', 'Z': '--..', ' ': ' ', '0': '-----',
+      '1': '.----', '2': '..---', '3': '...--', '4': '....-', '5': '.....',
+      '6': '-....', '7': '--...', '8': '---..', '9': '----.',
+      '&': '.-...', "'": '.----.', '@': '.--.-.', ')': '-.--.-', '(': '-.--.',
+      ':': '---...', ',': '--..--', '=': '-...-', '!': '-.-.--', '.': '.-.-.-',
+      '-': '-....-', '+': '.-.-.', '"': '.-..-.', '?': '..--..', '/': '-..-.'
+    }
+
+    // Checking if the operation given is encode 
+    if(operation == "enc"){
+        // Create a String called final
+        let final = "";
+        // Convert the inputted string to upper case
+        str_input = str_input.toUpperCase();
+        // Loop through the string
+        for(let i = 0; i < str_input.length; i++){
+            // If the character of the string at index i is within the dictionary
+            if(str_input[i] in mcode){
+                // If the character of the string at index i is space
+                if((str_input[i] == ' ')){
+                    // Add space to the final string
+                    final = final + " "
+                }
+                else{
+                    // Add the morse code equivalent of the character to the final string
+                    final = final + mcode[str_input[i]] + " ";
+                }
+            }
+            // If the character of the string at index i is not in the dictionary
+            else{
+                // Give an alert to the user 
+                window.alert("Invalid Input");
+                // Break out of the loop
+                break;
+            }
+        }
+        // Return the final string to the output text area and display it to the user in the browser
+        document.getElementById("output").innerHTML = final.trim();
+    }
+    // If the operation is not "enc"
+    else{
+        // Create a String called final
+        let final = "";
+        // Create a String called temp
+        let temp = "";
+        // Create a boolean named found and set it to false
+        let found = false;
+        // Loop through the string
+        for(let i = 0; i < str_input.length; i++){
+            // If the current character is not a space
+            if(str_input[i] != ' '){
+                // Add the current character to the variable temp
+                temp += str_input[i];
+                // If i+1 is equal to the length of the input string
+                if(i+1 == str_input.length){
+                    // Loop through the dictionary
+                    for(key in mcode){
+                        // If the value of the dictionary at that certain key is equal to the temp
+                        if(mcode[key] == temp){
+                            // Add the key to the final string
+                            final += key;
+                            // Set the temp to nothing
+                            temp = "";
+                            // Set found to true
+                            found = true;
+                        }
+                    }
+                    // If found is equal to false
+                    if(found == false){
+                        // Give an alert to the user 
+                        window.alert("Invalid Input");
+                        // break out of the loop
+                        break;
+                    }
+                    else{
+                        // Set found to false
+                        found = false;
+                    }
+                }
+            }
+            // Else if the current character is a space
+            else{
+                // loop through the dictionary 
+                for(key in mcode){
+                    // If the value of the dictionary at that certain key is equal to the temp
+                    if(mcode[key] == temp){
+                        // Add the key to the final
+                        final += key;
+                        // Set the temp to nothing
+                        temp = "";
+                        // Set found to true
+                        found = true;
+                    }   
+                }
+                // If the current character is a sapce and the next character is also a space
+                if((str_input[i] == ' ') && (str_input[i+1] == ' ')){
+                    // Add a space to the final string
+                    final += " ";
+                    // Set the temp string to nothing
+                    temp = "";
+                    // Set found to true
+                    found = true;
+                    // Set i to i + 1
+                    i = i + 1
+                }
+                // If found is equal to false
+                if(found == false){
+                    // Give an alert to the user 
+                    window.alert("Invalid Input");
+                    // break out of the loop
+                    break;
+                }
+                else{
+                    // Set found to false
+                    found = false;
+                }
+            }     
+        }
+        // Set the output to the final string trimmed
+        document.getElementById("output").innerHTML = final.trim();
+    }
+}
+
+</script>
+</head>
+<body>
+<H1>Morse code encoder/decoder</H1>
+<h3>@author: Vicente Feliu </h3>
+<div>
+<form>
+<p> Enter a string</p>
+<p> <textarea id="input" rows='5' cols='50'></textarea> </p>
+<p>
+<div id="optionloc" style="position:absolute; top:190px; left:240px;">
+<select id="operation">
+<option value="enc">Encode</option>
+<option value="dec">Decode</option>
+</select>
+</div>
+<div id="buttonloc" style="position:absolute; top:190px; left:320px;">
+<button type="button" id="submit" onclick=encdec()>Submit</button>
+</div>
+</p>
+
+<div>
+<p>Encoded/decoded Morse code: </p>
+<textarea id="output" rows='5' cols='50' readonly></textarea>
+</div>
+</form>
+</div>
+</body>
+</html>
